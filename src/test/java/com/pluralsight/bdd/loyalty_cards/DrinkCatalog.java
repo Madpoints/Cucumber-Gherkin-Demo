@@ -10,4 +10,8 @@ public class DrinkCatalog {
     public void addDrink(String drink, String category) {
         drinkCategories.put(drink, category);
     }
+
+    public String getCategoryOf(String drink) {
+        return drinkCategories.get(drink);
+    }
 }

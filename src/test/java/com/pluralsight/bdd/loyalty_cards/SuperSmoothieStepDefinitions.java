@@ -3,14 +3,15 @@ package com.pluralsight.bdd.loyalty_cards;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.assertj.core.api.Assertions;
 
 import java.util.List;
 import java.util.Map;
 
 public class SuperSmoothieStepDefinitions {
 
-    private DrinkCatalog drinkCatalog;
-    private SuperSmoothieSchema superSmoothieSchema;
+    private DrinkCatalog drinkCatalog = new DrinkCatalog();
+    private SuperSmoothieSchema superSmoothieSchema = new SuperSmoothieSchema(drinkCatalog);
     private MorningFreshnessMember michael;
 
     @Given("the following drink categories:")
@@ -29,15 +30,17 @@ public class SuperSmoothieStepDefinitions {
 
     @Given("^(.*) is a Morning Freshness Member$")
     public void michael_is_a_Morning_Freshness_Member(String name) {
-        michael = new MorningFreshnessMember(name);
+        michael = new MorningFreshnessMember(name, superSmoothieSchema);
     }
 
     @When("^(.*) purchases (\\d+) (.*) drinks?$")
-    public void michael_purchases_Banana_drinks(String name, Integer amoutn, String drink) {
+    public void michael_purchases_Banana_drinks(String name, Integer amount, String drink) {
+        michael.orders(amount, drink);
     }
 
     @Then("he should earn {int} points")
     public void he_should_earn_points(Integer expectedPoints) {
+        Assertions.assertThat(michael.getPoints()).isEqualTo(expectedPoints);
     }
 
 }
